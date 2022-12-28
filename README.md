@@ -1,92 +1,121 @@
-# ismed2022Z_zad2_Nuszkiewicz_Pasierbiewicz
+# ismed2022Z_Nuszkiewicz_Pasierbiewicz - Notifymed
 
 
 
-## Getting started
+## 0. Opis projektu, schemat działania i krótka instrukcja
+Aplikacja została stworzona w języku Python przy użyciu frameworka Django. 
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Dodatkowo użyliśmy bazy danych redis w celu umożliwienia kolejkowania wiadomości do pacjentów. Pomocna była biblioteka django_q, która umożliwiła nam planowanie wywołania się metody odpowiedzialnej za wysłanie powiadomienia o konkretnym czasie. 
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Całość systemu postanowiliśmy opakować w kontenery przy użyciu narzędzia Docker i opatrzeć plikiem docker-compose.yml, aby umożliwić uruchamianie systemu z dowolnego miejsca bez instalacji dodatkowych bibliotek, uruchamiania dodatkowych procesów czy instalowania bazy danych.
 
-## Add your files
+- Jest to aplikacja webowa umożliwiająca dodawanie powiadomień dla pacjentów przez lekarzy. 
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- Powiadomienia są automatycznie wysyłane o wskazanych przez lekarzy godzinach do wskazanych przez lekarzy pacjentów.
 
+- Jest możliwość rejestracji użytkownika jako pacjent lub lekarz. 
+
+- Użytkownik będący w grupie lekarzy ma dostęp do zakładki "Lekarz", w której znajduje się panel do dodawania powiadomień, natomiast pacjent ma dostęp do zakładki "Pacjent", gdzie ma możliwość odczytywania powiadomień i odbierania ich w postaci pojawiającego się pop-upu o konkretnym czasie.
+
+![Powiadomienie](./assets/powiadomienie.png)
+Alert z powiadomieniem, które pojawia się w wyznaczonym przez lekarza czasie
+
+
+![Powiadomienie](./assets/panel-lekarza.png)
+Lekarz może dodawać powiadomienia z poziomu panelu lekarza:
+
+
+Aby przetestować działanie aplikacji należy ją uruchomić, proces uruchamiania przy użyciu Dockera opisany jest [2. Quick start](#quick-start).
+
+Po uruchomieniu należy wpisać w przeglądarce adres: 
 ```
-cd existing_repo
-git remote add origin https://gitlab-stud.elka.pw.edu.pl/dnuszkie/ismed2022z_zad2_nuszkiewicz_pasierbiewicz.git
-git branch -M main
-git push -uf origin main
+http://localhost:8000
 ```
 
-## Integrate with your tools
+W celu przeprowadzenia testów należy uruchomić 3 różne przeglądarki (np. google chrome, mozilla firefox, microsoft edge), żeby możliwy był podgląd doktora i dwóch pacjentów w tym samym czasie.
 
-- [ ] [Set up project integrations](https://gitlab-stud.elka.pw.edu.pl/dnuszkie/ismed2022z_zad2_nuszkiewicz_pasierbiewicz/-/settings/integrations)
+Pozwoli to zobaczyć, że tylko jeden pacjent, wybrany przez lekarza dostaje powiadomienie o godzinie wskazanej przez doktora.
 
-## Collaborate with your team
+W celu wysłania powiadomienia należy wejść w panel lekarza, nacisnąć przycisk dodaj powiadomienie. Użytkownik będzie miał możliwość wyboru jednego z pacjentów, nadania tematu oraz treści powiadomienia i ustalenia godziny, w której powiadomienie zostanie nadane pacjentowi
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+O godzinie wysłania powiadomienia przez doktora pacjent otrzyma powiadomienie na samej górze panelu pacjenta.
 
-## Test and Deploy
+Podstawowy schemat zależności klas UML(nazewnictwo między przyjętym w kodzie może się różnić, model odwzorowuje zależności):
 
-Use the built-in continuous integration in GitLab.
+![Powiadomienie](./assets/uml.png)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 1. Set up a project in development mode
 
-***
+### Python version
 
-# Editing this README
+We used <b>Python 3.8.10</b> 
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Virtual environment
+To install venv with requirements needed in this project:
+```
+python3 -m venv env
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Activate a venv(in folder repo/)(venv could)
+```
+source env/bin/activate
+```
 
-## Name
-Choose a self-explaining name for your project.
+Install requirements
+```
+pip install -r requirements.txt
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Deactivate while being in a venv. Just type:
+```
+deactivate
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Run start.sh script:
+```
+bash start.sh
+```
+Then there is need to set up qcluster for djangoq Message Queue and redis, but it can be done with docker-compose automatically in the next step(Quick start)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## 2. Quick start
+First of all, install docker on your machine.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+https://docs.docker.com/get-docker/
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Then, being in this repo root foler ismed2022z_nuszkiewicz_pasierbiewicz/, type
+```
+docker-compose up --build
+```
+if this isn't working try to add sudo at the beginning
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Open browser and go to
+```
+http://localhost:8000
+```
+Now, everything should be up and running.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## 3. For testing purposes we created 2xpatients accounts and 1xdoctor. There are passes:
+Patient1:
+```
+username: patient
+password: notifymed123
+```
+Patient2:
+```
+username: patient1
+password: notifymed123
+```
+Doctor:
+```
+username: doctor
+password: notifymed123
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+
+

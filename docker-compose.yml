@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    image: ninjavaz/notifymed-app:latest
+    container_name: notifymed_app_container
+    command: python notifymed/manage.py runserver 0.0.0.0:8000
+  redis:
+    image: "redis:alpine"
+    ports:
+     - "6379:6379" 
+    container_name: notifymed_redis_container
+  django-q:
+    build: .
+    image: ninjavaz/notifymed-djangoq:latest
+    container_name: notifymed_djangoq_container
+    command: python notifymed/manage.py qcluster
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    
