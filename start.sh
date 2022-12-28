@@ -2,4 +2,4 @@
 
 
 #source env/bin/activate
-python3 notifymed/manage.py runserver
+python3 measuremed/manage.py runserver

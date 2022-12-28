@@ -1,0 +1,185 @@
+{% extends 'app/main.html' %} {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+   <!-- Page Heading -->
+   <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Panel pacjenta</h1>
+
+   </div>
+   <!-- Content Row -->
+   <div id="alertNotification"></div>
+   
+   <div class="row">
+
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-6 col-md-12 mb-4">
+         <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                     <div
+                        class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                        >
+                        Wszystkie powiadomienia
+                     </div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{notificationsAmount}}</div>
+                  </div>
+                  <div class="col-auto">
+                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-6 col-md-12 mb-4">
+         <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                     <div
+                        class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                        >
+                        Imię i nazwisko
+                     </div>
+                     <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                           <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                              {{patient.firstName}} {{patient.lastName}}
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+                  <div class="col-auto">
+                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   </div>
+   <!-- Content Row -->
+
+   
+   <div class="row">
+      <!-- Area Chart -->
+      <div class="col-xl-12 col-md-12">
+
+         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="d-flex justify-content-between">
+               <div class="my-auto">
+                  <h6 class=" font-weight-bold">Powiadomienia</h6>
+               </div>
+               <!-- <div class="">
+                  <a href="{% url 'create-notification' %}" class="btn btn-success btn-icon-split">
+
+                     <span class="text">Dodaj powiadomienie</span>
+                     </a>
+               </div> -->
+              </div>
+            </div>
+            <div class="card-body">
+               <div class="table-responsive">
+                  <table
+                     class="table table-bordered"
+                     id="dataTable"
+                     width="100%"
+                     cellspacing="0"
+                     >
+                     <thead>
+                        <tr>
+                           <th>Temat</th>
+                           <th>Wiadomość</th>
+                           <th>Wysyłka mailem</th>
+                           <th>Czy wysłano mailem</th>
+                           <th>Czy wysłano</th>
+                           <th>Zaplanowano na</th>
+                           
+                        </tr>
+                     </thead>
+
+                     <tbody>
+
+                        <tr>
+                           {% for notification in notifications %}
+                        <tr>
+                           <td>{{notification.topic}}</td>
+                           <td>{{notification.message}}</td>
+                           <!-- <td>{{notification.patient.firstName}} {{notification.patient.lastName}}</td> -->
+                           <td>
+
+                              {% if notification.sendByEmail == None%}
+                              Nie ustawiono
+                              {% elif notification.sendByEmail == False %}
+                              Nie
+                              {% elif notification.sendByEmail == True %}
+                              Tak
+                              {% endif %}
+                           </td>
+                           <td>
+
+                              {% if notification.isSentByEmail == None%}
+                              Nie ustawiono
+                              {% elif notification.isSentByEmail == False %}
+                              Nie
+                              {% elif notification.isSentByEmail == True %}
+                              Tak
+                              {% endif %}
+
+                           </td>
+                           <td>
+                              {% if notification.isSent == None%}
+                              Nie ustawiono
+                              {% elif notification.isSent == False %}
+                              Nie
+                              {% elif notification.isSent == True %}
+                              Tak
+                              {% endif %}
+                              
+
+                           </td>
+                           <td>{{notification.plannedOnDate | date:"d M Y H:i"}}</td>
+                           <!--  -->
+                        </tr>
+                        {% endfor %}
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script type="text/javascript">
+   // $('#alertNotification').hide();
+    let url = `ws://${window.location.host}/ws/notifications/`
+
+    const chatSocket = new WebSocket(url)
+    chatSocket.onmessage = function(e){
+      let data = JSON.parse(e.data)
+
+      let alertNotification = document.querySelector("#alertNotification")
+
+
+   alertNotification.insertAdjacentHTML('beforeend', `      
+   <div class="alert alert-success" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <strong><h4 class="alert-heading">${data.topic}</h4></strong>
+  <p>${data.message}</p>
+  <hr>
+  <p class="mb-0">Czas powiadomienia: ${data.plannedOnDate}, lekarz: ${data.doctorFullName}</p>
+  
+   </div>
+      `)
+    }
+
+</script>
+
+{% endblock %}
