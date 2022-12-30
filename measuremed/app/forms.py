@@ -5,10 +5,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
-class NotificationForm(ModelForm):
+class MeasureForm(ModelForm):
     class Meta:
-        model = Notification
-        fields = ['patient', 'topic', 'message', 'sendByEmail', 'plannedOnDate']
+        model = Measure
+        # fields = ['patient', 'topic', 'message', 'sendByEmail', 'plannedOnDate']
+        fields = ['patient', 'age', 'height', 'bodyWeight', 'measureDate']
+
+        
 
 
 class CreateUserForm(UserCreationForm):
@@ -24,3 +27,7 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','firstName', 'lastName', 'email', 'password1', 'password2', 'userGroup']
+        
+        
+        
+        

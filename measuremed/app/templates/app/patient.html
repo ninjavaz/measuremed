@@ -6,8 +6,7 @@
       <h1 class="h3 mb-0 text-gray-800">Panel pacjenta</h1>
 
    </div>
-   <!-- Content Row -->
-   <div id="alertNotification"></div>
+
    
    <div class="row">
 
@@ -20,9 +19,9 @@
                      <div
                         class="text-xs font-weight-bold text-success text-uppercase mb-1"
                         >
-                        Wszystkie powiadomienia
+                        Wszystkie pomiary
                      </div>
-                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{notificationsAmount}}</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{measuresAmount}}</div>
                   </div>
                   <div class="col-auto">
                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -62,6 +61,35 @@
    </div>
    <!-- Content Row -->
 
+
+
+
+<div class="row">
+   <!-- Area Chart -->
+   <div class="col-xl-12 col-md-12">
+
+      <div class="card shadow mb-4">
+         <div class="card-header py-3">
+           <div class="d-flex justify-content-between">
+            <div class="my-auto">
+               <h6 class=" font-weight-bold">Wykres BMI</h6>
+            </div>
+           </div>
+         </div>
+         <div class="card-body">
+            {% comment %} <div class="table-responsive"> {% endcomment %}
+               {% comment %} <div> {% endcomment %}
+               <div style="row-fluid">
+                  <canvas style="width: 100% !important; max-height: 550px;" id="myChart"></canvas>
+                {% comment %} </div> {% endcomment %}
+               </div>
+                
+            {% comment %} </div> {% endcomment %}
+         </div>
+      </div>
+   </div>
+</div>
+
    
    <div class="row">
       <!-- Area Chart -->
@@ -71,14 +99,8 @@
             <div class="card-header py-3">
               <div class="d-flex justify-content-between">
                <div class="my-auto">
-                  <h6 class=" font-weight-bold">Powiadomienia</h6>
+                  <h6 class=" font-weight-bold">Pomiary</h6>
                </div>
-               <!-- <div class="">
-                  <a href="{% url 'create-notification' %}" class="btn btn-success btn-icon-split">
-
-                     <span class="text">Dodaj powiadomienie</span>
-                     </a>
-               </div> -->
               </div>
             </div>
             <div class="card-body">
@@ -91,57 +113,29 @@
                      >
                      <thead>
                         <tr>
-                           <th>Temat</th>
-                           <th>Wiadomość</th>
-                           <th>Wysyłka mailem</th>
-                           <th>Czy wysłano mailem</th>
-                           <th>Czy wysłano</th>
-                           <th>Zaplanowano na</th>
+                           <th>ID pomiaru</th>
+                           <th>Masa ciała</th>
+                           <th>Wzrost</th>
+                           <th>Wiek</th>
                            
+                           <th>BMW</th>
+                           <th>Data pomiaru</th>
+                        
                         </tr>
                      </thead>
 
                      <tbody>
 
                         <tr>
-                           {% for notification in notifications %}
+                           {% for measure in measures %}
                         <tr>
-                           <td>{{notification.topic}}</td>
-                           <td>{{notification.message}}</td>
+                           <td>{{measure.id}}</td>
+                           <td>{{measure.bodyWeight}} kg</td>
                            <!-- <td>{{notification.patient.firstName}} {{notification.patient.lastName}}</td> -->
-                           <td>
-
-                              {% if notification.sendByEmail == None%}
-                              Nie ustawiono
-                              {% elif notification.sendByEmail == False %}
-                              Nie
-                              {% elif notification.sendByEmail == True %}
-                              Tak
-                              {% endif %}
-                           </td>
-                           <td>
-
-                              {% if notification.isSentByEmail == None%}
-                              Nie ustawiono
-                              {% elif notification.isSentByEmail == False %}
-                              Nie
-                              {% elif notification.isSentByEmail == True %}
-                              Tak
-                              {% endif %}
-
-                           </td>
-                           <td>
-                              {% if notification.isSent == None%}
-                              Nie ustawiono
-                              {% elif notification.isSent == False %}
-                              Nie
-                              {% elif notification.isSent == True %}
-                              Tak
-                              {% endif %}
-                              
-
-                           </td>
-                           <td>{{notification.plannedOnDate | date:"d M Y H:i"}}</td>
+                           <td>{{measure.height}} cm</td>
+                           <td>{{measure.age}} lat</td>
+                           <td>{{measure.bmi}}</td>
+                           <td>{{measure.measureDate | date:"d M Y H:i"}}</td>
                            <!--  -->
                         </tr>
                         {% endfor %}
@@ -155,6 +149,202 @@
    </div>
 </div>
 
+
+
+
+
+
+
+<script>
+
+ 
+   
+   const ctx = document.getElementById('myChart');
+
+   let labels = [];
+   let datapoints = [];
+   {% comment %} {% autoescape off %} {% endcomment %}
+   datapoints= [
+   {% for measure in measures %}
+      {{ measure.bmi }},
+   {% endfor %}];
+
+   labels = [ {% for measure in measures %}
+   "{{ measure.measureDate | date:"d M Y H:i"}}",
+{% endfor %}];
+
+   console.log(labels);
+   console.log(datapoints);
+
+
+   const DATA_COUNT = 12;
+{% comment %} const labels = []; {% endcomment %}
+{% comment %} for (let i = 0; i < DATA_COUNT; ++i) {
+  labels.push(i.toString());
+} {% endcomment %}
+
+{% comment %} const labels = ['1-01-2022','1-01-2022','1-01-2022','1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022'  ] {% endcomment %}
+{% comment %} const datapoints = [0, 20, 20, 60, 60, 120, NaN, 180, 120, 125, 105, 110, 170]; {% endcomment %}
+
+
+
+{% comment %} for (let i = 0; i < measures.length; ++i) {
+  labels.push(i.toString());
+} {% endcomment %}
+{% comment %} Array.of(measures).forEach(i=>labels.push(i.measureDate.toString()));
+measures.forEach(i=>datapoints.push(i.bmi)); {% endcomment %}
+
+
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: 'Wartość BMI',
+      data: datapoints,
+      fill: false,
+      borderColor: '#1cc88a',
+      backgroundColor: '#1cc88a',
+      cubicInterpolationMode: 'monotone',
+      tension: 0.4,
+      
+    }
+  ]
+};
+
+
+const config = {
+   type: 'line',
+   data: data,
+   options: {
+     responsive: true,
+     plugins: {
+       title: {
+         display: true,
+         text: 'Wykres BMI pacjenta'
+       },
+     },
+     interaction: {
+       intersect: false,
+     },
+     scales: {
+       x: {
+         display: true,
+         title: {
+           display: true,
+           text: 'Data pomiaru'
+         }
+       },
+       y: {
+         display: true,
+         title: {
+           display: true,
+           text: 'Wartość BMI'
+         },
+         suggestedMin: -10,
+         suggestedMax: 200
+       }
+     }
+   },
+ };
+
+   new Chart(ctx, config);
+
+   {% comment %} window.onload = function() {
+      const ctx = document.getElementById('myChart');
+      new Chart(ctx, config);
+    }; {% endcomment %}
+
+   {% comment %} window.addEventListener('resize', function() {
+      myChart.resize();
+    }); {% endcomment %}
+ </script>
+
+
+
+
+
+
+
+
+
+
+{% comment %} <script>
+
+   const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Chart.js Line Chart - Cubic interpolation mode'
+          },
+        },
+        interaction: {
+          intersect: false,
+        },
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Value'
+            },
+            suggestedMin: -10,
+            suggestedMax: 200
+          }
+        }
+      },
+    };
+
+
+   const DATA_COUNT = 12;
+   const labels = [];
+   for (let i = 0; i < DATA_COUNT; ++i) {
+     labels.push(i.toString());
+   }
+   const datapoints = [0, 20, 20, 60, 60, 120, NaN, 180, 120, 125, 105, 110, 170];
+   const data = {
+     labels: labels,
+     datasets: [
+       {
+         label: 'Cubic interpolation (monotone)',
+         data: datapoints,
+         borderColor: Utils.CHART_COLORS.red,
+         fill: false,
+         cubicInterpolationMode: 'monotone',
+         tension: 0.4
+       }, {
+         label: 'Cubic interpolation',
+         data: datapoints,
+         borderColor: Utils.CHART_COLORS.blue,
+         fill: false,
+         tension: 0.4
+       }, {
+         label: 'Linear interpolation (default)',
+         data: datapoints,
+         borderColor: Utils.CHART_COLORS.green,
+         fill: false
+       }
+     ]
+   };
+
+</script> {% endcomment %}
+
+
+
+
+
+
+
+{% comment %} 
 <script type="text/javascript">
    // $('#alertNotification').hide();
     let url = `ws://${window.location.host}/ws/notifications/`
@@ -180,6 +370,6 @@
       `)
     }
 
-</script>
+</script> {% endcomment %}
 
 {% endblock %}

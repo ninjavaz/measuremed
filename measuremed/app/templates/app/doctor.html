@@ -38,9 +38,9 @@
                      <div
                         class="text-xs font-weight-bold text-success text-uppercase mb-1"
                         >
-                        Wszystkie powiadomienia
+                        Wszystkie pomiary
                      </div>
-                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{notificationsAmount}}</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{measuresAmount}}</div>
                   </div>
                   <div class="col-auto">
                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -112,14 +112,11 @@
             <div class="card-header py-3">
               <div class="d-flex justify-content-between">
                <div class="my-auto">
-                  <h6 class=" font-weight-bold">Powiadomienia</h6>
+                  <h6 class=" font-weight-bold">Pomiary</h6>
                </div>
                <div class="">
-                  <a href="{% url 'create-notification' %}" class="btn btn-success btn-icon-split">
-                     <!-- <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                        </span> -->
-                     <span class="text">Dodaj powiadomienie</span>
+                  <a href="{% url 'create-measure' %}" class="btn btn-success btn-icon-split">
+                     <span class="text">Dodaj pomiar</span>
                      </a>
                </div>
               </div>
@@ -127,108 +124,48 @@
             <div class="card-body">
                <div class="table-responsive">
                   <table
-                     class="table table-bordered"
-                     id="dataTable"
-                     width="100%"
-                     cellspacing="0"
-                     >
-                     <thead>
-                        <tr>
-                           <th>Temat</th>
-                           <th>Wiadomość</th>
-                           <th>Pacjent</th>
-                           <th>Wysyłka mailem</th>
-                           <th>Czy wysłano mailem</th>
-                           <th>Czy wysłano</th>
-                           <th>Zaplanowano na</th>
-                           <th></th>
-                        </tr>
-                     </thead>
-                     <!-- <tfoot>
-                        <tr>
-                          <th>Name</th>
-                          <th>Position</th>
-                          <th>Office</th>
-                          <th>Age</th>
-                          <th>Start date</th>
-                          <th>Salary</th>
-                        </tr>
-                        </tfoot> -->
-                     <tbody>
-                        <!-- <tr>
-                           <td>Shad Decker</td>
-                           <td>Regional Director</td>
-                           <td>Edinburgh</td>
-                           <td>51</td>
-                           <td>2008/11/13</td>
-                           <td>$183,000</td>
-                           </tr>ł
-                           <tr>
-                           <td>Michael Bruce</td>
-                           <td>Javascript Developer</td>
-                           <td>Singapore</td>
-                           <td>29</td>
-                           <td>2011/06/27</td>
-                           <td>$183,000</td>
-                           </tr>
-                           <tr>
-                           <td>Donna Snider</td>
-                           <td>Customer Support</td>
-                           <td>New York</td>
-                           <td>27</td>
-                           <td>2011/01/25</td>
-                           <td>$112,000</td>
-                           </tr> -->
-                        <tr>
-                           {% for notification in notifications %}
-                        <tr>
-                           <td>{{notification.topic}}</td>
-                           <td>{{notification.message}}</td>
-                           <td>{{notification.patient.firstName}} {{notification.patient.lastName}}</td>
-                           <td>
+                  class="table table-bordered"
+                  id="dataTable"
+                  width="100%"
+                  cellspacing="0"
+                  >
+                  <thead>
+                     <tr>
+                        <th>ID pomiaru</th>
+                        <th>Masa ciała</th>
+                        <th>Wzrost</th>
+                        <th>Wiek</th>
+                        
+                        <th>BMW</th>
+                        <th>Data pomiaru</th>
+                        <th></th>
+                     </tr>
+                  </thead>
 
-                              {% if notification.sendByEmail == None%}
-                              Nie ustawiono
-                              {% elif notification.sendByEmail == False %}
-                              Nie
-                              {% elif notification.sendByEmail == True %}
-                              Tak
-                              {% endif %}
-                           </td>
-                           <td>
+                  <tbody>
 
-                              {% if notification.isSentByEmail == None%}
-                              Nie ustawiono
-                              {% elif notification.isSentByEmail == False %}
-                              Nie
-                              {% elif notification.isSentByEmail == True %}
-                              Tak
-                              {% endif %}
+                     <tr>
+                        {% for measure in measures %}
+                        <tr>
+                           <td>{{measure.id}}</td>
+                           <td>{{measure.bodyWeight}} kg</td>
+                           <!-- <td>{{notification.patient.firstName}} {{notification.patient.lastName}}</td> -->
+                           <td>{{measure.height}} cm</td>
+                           <td>{{measure.age}} lat</td>
+                           <td>{{measure.bmi}}</td>
+                           <td>{{measure.measureDate | date:"d M Y H:i"}}</td>
+                           <!--  -->
 
-                           </td>
-                           <td>
-                              {% if notification.isSent == None%}
-                              Nie ustawiono
-                              {% elif notification.isSent == False %}
-                              Nie
-                              {% elif notification.isSent == True %}
-                              Tak
-                              {% endif %}
-                              
-
-                           </td>
-                           <td>{{notification.plannedOnDate | date:"d M Y H:i"}}</td>
-                           <td class="text-center"><a href="{% url 'delete-notification' notification.id %}" class="btn btn-danger btn-icon-split">
-                              <!-- <span class="icon text-white-50">
-                                 <i class="fas fa-check"></i>
-                                 </span> -->
+                           <td class="text-center"><a href="{% url 'delete-measure' measure.id %}" class="btn btn-danger btn-icon-split">
                               <span class="text">Usuń</span>
-                              </a></td>
+                              </a>
+                           </td>
+
                         </tr>
-                        {% endfor %}
-                        </tr>
-                     </tbody>
-                  </table>
+                     {% endfor %}
+                     </tr>
+                  </tbody>
+               </table>
                </div>
             </div>
          </div>

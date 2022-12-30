@@ -1,10 +1,10 @@
 {% extends 'app/main.html' %} {% load static %} {% block content %}
 
-<p>Are you sure you want to delete notification with topic: <b>"{{notification.topic}}"</b>
-    to patient: <b>{{notification.patient.firstName}} {{notification.patient.lastName}}</b>
+<p>Are you sure you want to delete measure with id: <b>{{measure.id}}</b>
+    to patient: <b>{{measure.patient.firstName}} {{measure.patient.lastName}}</b>
 </p>
 
-<form action="{% url 'delete-notification' notification.id %}" method="POST">
+<form action="{% url 'delete-measure' measure.id %}" method="POST">
   {% csrf_token %}
 
   <a href="{% url 'home' %}">Cancel</a>

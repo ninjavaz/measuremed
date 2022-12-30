@@ -1,4 +1,5 @@
 from datetime import timedelta
+import math
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 
@@ -6,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .decorators import unauthenticated_user, allowed_users
 
 from .models import *
-from .forms import CreateUserForm, NotificationForm
+from .forms import CreateUserForm, MeasureForm
 
 
 from django.contrib import messages
@@ -129,10 +130,10 @@ def doctor(request):
     current_user = request.user
     doctor = Doctor.objects.get(user=current_user.id)
 
-    notifications = Notification.objects.filter(doctor=doctor)
-    notificationsAmount = notifications.count()
+    measures = Measure.objects.filter(doctor=doctor)
+    measuresAmount = measures.count()
 
-    context = {'route': 'doctor', 'notifications': notifications, 'notificationsAmount': notificationsAmount, 'doctor': doctor}
+    context = {'route': 'doctor', 'measures': measures, 'measuresAmount': measuresAmount, 'doctor': doctor}
 
     return render(request, 'app/doctor.html', context)
 
@@ -155,11 +156,11 @@ def patient(request):
     current_user = request.user
     patient = Patient.objects.get(user=current_user.id)
 
-    notifications = Notification.objects.filter(patient=patient)
-    notificationsAmount = notifications.count()
+    measures = Measure.objects.filter(patient=patient)
+    measuresAmount = measures.count()
 
     
-    context = {'route': 'patient', 'notifications': notifications, 'notificationsAmount': notificationsAmount, 'patient': patient}
+    context = {'route': 'patient', 'measures': measures, 'measuresAmount': measuresAmount, 'patient': patient}
 
     
     
@@ -169,18 +170,18 @@ def patient(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['doctor'])
-def createNotification(request):
+def createMeasure(request):
     """
-    creating notification by users who are in doctor group
+    creating measure by users who are in doctor group
     Args:
         request 
 
     Returns:
-        redirection to doctor page, notification for choosen patient
+        redirection to doctor page, measure for choosen patient
     """
-    form = NotificationForm()
+    form = MeasureForm()
     if request.method == 'POST':
-        form = NotificationForm(request.POST)
+        form = MeasureForm(request.POST)
         if form.is_valid():
             form = form.save()
 
@@ -188,16 +189,11 @@ def createNotification(request):
             current_user = request.user
             doctor = Doctor.objects.get(user=current_user.id)
 
-            notification = Notification.objects.get(id=form.id)
-            notification.doctor = doctor
-            notification.save()
-    
+            measure = Measure.objects.get(id=form.id)
+            measure.doctor = doctor
+            measure.bmi = round((measure.bodyWeight / ((measure.height/100)**2)), 2)
+            measure.save()
 
-            # schedule('app.jobs.scheduleNotification',
-            #             notification.pk,
-            #             schedule_type=Schedule.ONCE, 
-            #             next_run=notification.plannedOnDate
-            #             )
 
             return redirect('/doctor')
 
@@ -206,23 +202,23 @@ def createNotification(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['doctor'])
-def deleteNotification(request, pk):
+def deleteMeasure(request, pk):
     """
-    deleting a created earlier notification
+    deleting a created earlier measure
 
     Args:
         request 
         pk 
 
     Returns:
-        redirection to page that confirms deletion of a notification
+        redirection to page that confirms deletion of a measure
     """
-    notification = Notification.objects.get(id=pk)
+    measure = Measure.objects.get(id=pk)
     if request.method == "POST":
-        notification.delete()
+        measure.delete()
         return redirect('/doctor')
 
-    context = {'notification': notification}
+    context = {'measure': measure}
     return render(request, 'app/delete.html', context)
 
 

@@ -102,11 +102,7 @@ Patient1:
 username: patient
 password: notifymed123
 ```
-Patient2:
-```
-username: patient1
-password: notifymed123
-```
+
 Doctor:
 ```
 username: doctor
