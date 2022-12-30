@@ -61,9 +61,6 @@
    </div>
    <!-- Content Row -->
 
-
-
-
 <div class="row">
    <!-- Area Chart -->
    <div class="col-xl-12 col-md-12">
@@ -77,14 +74,13 @@
            </div>
          </div>
          <div class="card-body">
-            {% comment %} <div class="table-responsive"> {% endcomment %}
-               {% comment %} <div> {% endcomment %}
-               <div style="row-fluid">
-                  <canvas style="width: 100% !important; max-height: 550px;" id="myChart"></canvas>
-                {% comment %} </div> {% endcomment %}
+
+               <div style="container">
+                  <canvas  id="myChart" height="80px"></canvas>
+
                </div>
                 
-            {% comment %} </div> {% endcomment %}
+
          </div>
       </div>
    </div>
@@ -117,26 +113,21 @@
                            <th>Masa ciała</th>
                            <th>Wzrost</th>
                            <th>Wiek</th>
-                           
                            <th>BMW</th>
                            <th>Data pomiaru</th>
-                        
                         </tr>
                      </thead>
 
                      <tbody>
-
                         <tr>
                            {% for measure in measures %}
                         <tr>
                            <td>{{measure.id}}</td>
                            <td>{{measure.bodyWeight}} kg</td>
-                           <!-- <td>{{notification.patient.firstName}} {{notification.patient.lastName}}</td> -->
                            <td>{{measure.height}} cm</td>
                            <td>{{measure.age}} lat</td>
                            <td>{{measure.bmi}}</td>
                            <td>{{measure.measureDate | date:"d M Y H:i"}}</td>
-                           <!--  -->
                         </tr>
                         {% endfor %}
                         </tr>
@@ -149,21 +140,13 @@
    </div>
 </div>
 
-
-
-
-
-
-
 <script>
-
- 
    
    const ctx = document.getElementById('myChart');
 
    let labels = [];
    let datapoints = [];
-   {% comment %} {% autoescape off %} {% endcomment %}
+
    datapoints= [
    {% for measure in measures %}
       {{ measure.bmi }},
@@ -172,28 +155,6 @@
    labels = [ {% for measure in measures %}
    "{{ measure.measureDate | date:"d M Y H:i"}}",
 {% endfor %}];
-
-   console.log(labels);
-   console.log(datapoints);
-
-
-   const DATA_COUNT = 12;
-{% comment %} const labels = []; {% endcomment %}
-{% comment %} for (let i = 0; i < DATA_COUNT; ++i) {
-  labels.push(i.toString());
-} {% endcomment %}
-
-{% comment %} const labels = ['1-01-2022','1-01-2022','1-01-2022','1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022' ,'1-01-2022'  ] {% endcomment %}
-{% comment %} const datapoints = [0, 20, 20, 60, 60, 120, NaN, 180, 120, 125, 105, 110, 170]; {% endcomment %}
-
-
-
-{% comment %} for (let i = 0; i < measures.length; ++i) {
-  labels.push(i.toString());
-} {% endcomment %}
-{% comment %} Array.of(measures).forEach(i=>labels.push(i.measureDate.toString()));
-measures.forEach(i=>datapoints.push(i.bmi)); {% endcomment %}
-
 
 const data = {
   labels: labels,
@@ -210,7 +171,6 @@ const data = {
     }
   ]
 };
-
 
 const config = {
    type: 'line',
@@ -249,14 +209,6 @@ const config = {
 
    new Chart(ctx, config);
 
-   {% comment %} window.onload = function() {
-      const ctx = document.getElementById('myChart');
-      new Chart(ctx, config);
-    }; {% endcomment %}
-
-   {% comment %} window.addEventListener('resize', function() {
-      myChart.resize();
-    }); {% endcomment %}
  </script>
 
 

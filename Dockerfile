@@ -1,7 +1,34 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
+# # For more information, please refer to https://aka.ms/vscode-docker-python
+# FROM python:3.8-slim
+
+# EXPOSE 8000
+
+# # Keeps Python from generating .pyc files in the container
+# ENV PYTHONDONTWRITEBYTECODE=1
+
+# # Turns off buffering for easier container logging
+# ENV PYTHONUNBUFFERED=1
+
+# # Install pip requirements
+# COPY requirements.txt .
+# RUN python -m pip install -r requirements.txt
+
+# WORKDIR /app
+# COPY . /app
+
+# # Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
+# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+# USER appuser
+
+# # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "measuremed.wsgi"]
+
+
+
+
 FROM python:3.8-slim
 
-EXPOSE 8000
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -16,11 +43,8 @@ RUN python -m pip install -r requirements.txt
 WORKDIR /app
 COPY . /app
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
 
+EXPOSE 8000
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "measuremed.wsgi"]
 
@@ -63,4 +87,19 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "measuremed.wsgi"]
 #       - .:/app
 #     depends_on:
 #       - redis
+    
+
+
+
+    # version: "3.8"
+# services:
+#   app:
+#     build: .
+#     volumes:
+#       - .:/app
+#     ports:
+#       - 8000:8000
+#     image: ninjavaz/measuremed-app:latest
+#     container_name: measuremed_app_container
+#     command: python measuremed/manage.py runserver 0.0.0.0:8000
     

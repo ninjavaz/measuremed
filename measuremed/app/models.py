@@ -47,15 +47,6 @@ class Measure(models.Model):
     height = models.IntegerField(null=False)
     # id = models.CharField(max_length=150, null=False, default='')
     measureDate = models.DateTimeField(null=False, default=datetime.datetime.now)
-    
-    
-    
 
-    # message = models.CharField(max_length=200, null=False)
-    # sendByEmail = models.BooleanField(null=False, default=False)
-    # isSentByEmail = models.BooleanField(null=True, default=False)
-    # isSent = models.BooleanField(null=True, default=False)
-    # createdAtDate = models.DateTimeField(auto_now_add=True, null=False)
-    # plannedOnDate = models.DateTimeField(null=False, default=datetime.datetime.now)
     
 
