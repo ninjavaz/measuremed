@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*0=2@2em^me7m05f=)=24xd&8y@8lfil5k3_li*-(%*tm=$k0g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "measuremed.azurewebsites.net", "localhost"]
 
 
 # Application definition
@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'app'
+    'measuremed.app'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://measuremed.azurewebsites.net'
 ]
 
 # Configure your Q cluster
@@ -48,18 +52,18 @@ INSTALLED_APPS = [
 #     "name": "app",
 #     "orm": "default",  # Use Django's ORM + database for broker
 # }
-Q_CLUSTER = {
-    "name": "app",
-    "workers": 1,
-    "timeout": 10,
-    "retry": 20,
-    "queue_limit": 50,
-    "bulk": 10,
-    "orm": "default",
-    "ack_failures": True,
-    "max_attempts": 1,
-    "attempt_count": 0,
-}
+# Q_CLUSTER = {
+#     "name": "app",
+#     "workers": 1,
+#     "timeout": 10,
+#     "retry": 20,
+#     "queue_limit": 50,
+#     "bulk": 10,
+#     "orm": "default",
+#     "ack_failures": True,
+#     "max_attempts": 1,
+#     "attempt_count": 0,
+# }
 
 
 
@@ -91,7 +95,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'measuremed.urls'
+ROOT_URLCONF = 'measuremed.measuremed.urls'
 
 TEMPLATES = [
     {
@@ -109,7 +113,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'measuremed.wsgi.application'
+WSGI_APPLICATION = 'measuremed.measuremed.wsgi.application'
 
 
 # Database
