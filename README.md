@@ -46,9 +46,6 @@ Run start.sh script:
 ```
 bash start.sh
 ```
-Then there is need to set up qcluster for djangoq Message Queue and redis, but it can be done with docker-compose automatically in the next step(Quick start)
-
-
 
 
 
