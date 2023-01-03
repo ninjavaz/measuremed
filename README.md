@@ -15,7 +15,13 @@ Całość systemu postanowiliśmy opakować w kontenery przy użyciu narzędzia 
 
 Aby przetestować działanie aplikacji należy ją uruchomić, proces uruchamiania przy użyciu Dockera opisany jest [2. Quick start](#quick-start).
 
-Po uruchomieniu należy wpisać w przeglądarce adres: 
+[**INTERNET**]Postanowiliśmy wdrożyć nasze rozwiązanie na platformę chmurową Azure przy pomocy serwisu Azure Web App Service - rozwiązania serverless do wdrażania aplikacji internetowych. Aby skorzystać z aplikacji należy wpisać w przeglądarce:
+```
+https://measuremed.azurewebsites.net/
+```
+
+
+[**LOKALNIE**]Po uruchomieniu należy wpisać w przeglądarce adres: 
 ```
 http://localhost:8000
 ```
@@ -55,25 +61,7 @@ bash start.sh
 Then there is need to set up qcluster for djangoq Message Queue and redis, but it can be done with docker-compose automatically in the next step(Quick start)
 
 
-## 2. Quick start
-First of all, install docker on your machine.
-
-https://docs.docker.com/get-docker/
-
-Then, being in this repo root foler ismed2022z_nuszkiewicz_pasierbiewicz/, type
-```
-docker-compose up --build
-```
-if this isn't working try to add sudo at the beginning
-
-Open browser and go to
-```
-http://localhost:8000
-```
-Now, everything should be up and running.
-
-
-## 3. For testing purposes we created 2xpatients accounts and 1xdoctor. There are passes:
+## 2. For testing purposes we created 2xpatients accounts and 1xdoctor. There are passes:
 Patient:
 ```
 username: patient
