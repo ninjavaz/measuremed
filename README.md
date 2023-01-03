@@ -1,27 +1,15 @@
-# ismed2022Z_Nuszkiewicz_Pasierbiewicz - measuremed
+measuremed - Django App
 
+## 0. Project description
+App in which we can store BMi measures added by Doctors. There are two account types - doctor and patient.
 
-
-## 0. Opis projektu, schemat działania i krótka instrukcja
-Aplikacja została stworzona w języku Python przy użyciu frameworka Django. 
-
-Całość systemu postanowiliśmy opakować w kontenery przy użyciu narzędzia Docker i opatrzeć plikiem docker-compose.yml, aby umożliwić uruchamianie systemu z dowolnego miejsca bez instalacji dodatkowych bibliotek, uruchamiania dodatkowych procesów czy instalowania bazy danych.
-
-- Jest to aplikacja webowa umożliwiająca dodawanie pomiarów BMI dla pacjentów przez lekarzy. 
-
-- Jest możliwość rejestracji użytkownika jako pacjent lub lekarz. 
-
-- Użytkownik będący w grupie lekarzy ma dostęp do zakładki "Lekarz", w której znajduje się panel do dodawania pomiarów, natomiast pacjent ma dostęp do zakładki "Pacjent", gdzie ma możliwość odczytywania pomiarów BMI.
-
-Aby przetestować działanie aplikacji należy ją uruchomić, proces uruchamiania przy użyciu Dockera opisany jest [2. Quick start](#quick-start).
-
-[**INTERNET**]Postanowiliśmy wdrożyć nasze rozwiązanie na platformę chmurową Azure przy pomocy serwisu Azure Web App Service - rozwiązania serverless do wdrażania aplikacji internetowych. Aby skorzystać z aplikacji należy wpisać w przeglądarce:
+[**GLOBALLY**] App is deployed on Azure Web App Service. Here is the link:
 ```
 https://measuremed.azurewebsites.net/
 ```
 
 
-[**LOKALNIE**]Po uruchomieniu należy wpisać w przeglądarce adres: 
+[**LOCALLY**] After starting with venv etc.(as described below), just type in the browser:
 ```
 http://localhost:8000
 ```
@@ -59,20 +47,6 @@ Run start.sh script:
 bash start.sh
 ```
 Then there is need to set up qcluster for djangoq Message Queue and redis, but it can be done with docker-compose automatically in the next step(Quick start)
-
-
-## 2. For testing purposes we created 2xpatients accounts and 1xdoctor. There are passes:
-Patient:
-```
-username: patient
-password: notifymed123
-```
-
-Doctor:
-```
-username: doctor
-password: notifymed123
-```
 
 
 
